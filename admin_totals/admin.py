@@ -12,12 +12,12 @@ class ChangeListTotals(ChangeList):
             self.aggregations = []
             list_totals = dict(self.model_admin.list_totals)
             for field in self.list_display:
-                selector = self.aggregations if self.model_admin.limit_to_page else self.queryset
+                selector = self.result_list if self.model_admin.limit_to_page else self.queryset
                 if field in list_totals:
-                    selector.append(
-                        self.result_list.aggregate(agg=list_totals[field](field))['agg'])
+                    self.aggregations.append(
+                        selector.aggregate(agg=list_totals[field](field))['agg'])
                 else:
-                    selector.append('')
+                    self.aggregations.append('')
 
 
 class ModelAdminTotals(admin.ModelAdmin):
